@@ -7,6 +7,9 @@ Mis propios ejemplos para aprender go
   - map
   - slices
   - pointers
+  
+  Sin embargo, recuerda que si quieres reasignar una referencia a alguno de estos objetos dentro de la llamada, tienes que desreferenciarlo. e.g.
+  https://play.golang.org/p/Q6vrAmmJWR6
 
 - Los tipos de datos `char` se conocen como `runes` y es un alias para `int32`.
 
