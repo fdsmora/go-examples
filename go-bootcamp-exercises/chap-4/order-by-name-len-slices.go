@@ -13,21 +13,17 @@ func main() {
 	max := getMaxLen(names)
 	
 	// 2. Allocate result slice
-	result := make([][]string, max+1)
+	result := make([][]string, max)
 	
 	// 3. Fill result slice
 	for _, n := range names {
-		appendVal(result, n)
+		result[len(n)-1] = append(result[len(n)-1], n)
 	}
 		
 	// 4. Print result
 	fmt.Print(result)
 }
 
-func appendVal(arr [][]string, str string) {
-	slen := len(str)
-	arr[slen] = append(arr[slen], str) 
-}
 
 func getMaxLen(arr []string) int {
 	var max int
@@ -38,4 +34,3 @@ func getMaxLen(arr []string) int {
 	}
 	return max
 }
-
