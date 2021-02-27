@@ -19,6 +19,8 @@ func main() {
 }
 
 // Since the zero value of a slice (nil) acts like a zero-length slice, you can declare a slice variable and then append to it in a loop:
+// Additional note on `s`: here we pass the `s` slice by value, because slices are simple, cheap types that are just some kind of "header" or roughly "metadata" to an array,
+// An slice just has a pointer to an underlying array, a lenght and a capacity. So it doesn't matter if all time slices are passed by value, its always cheap. 
 func Filter(s []int, fn func(int) bool) []int {
     var p []int // == nil
     for _, v := range s {
