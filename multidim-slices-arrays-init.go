@@ -14,4 +14,6 @@ func main() {
 	var arr [3][3]int //arrays are values
 	fmt.Println(slc)
 	fmt.Println(arr)
+	fmt.Printf("slc is type %T\n", slc)
+	fmt.Printf("slc is type %T\n", arr)
 }
