@@ -16,3 +16,5 @@ Mis propios ejemplos para aprender go
 - `make`: The make built-in function allocates and initializes an object of type slice, map, or chan (only). Like new, the first argument is a type, not a value. Unlike new, make's return type is the same as the type of its argument, not a pointer to it. 
 
 - Diferencia entre `make` y `new`: `new` aloja memoria para una variable del tipo especificado y retorna un apuntador a la memoria alojada. `make` retorna una copia del tipo especificado, ej. `s := make(int[], 10)`, `s` es un slice, técnicamente a un arreglo de 10 ints, mas no es un apuntador a un slice. 
+
+- Buen recurso acerca de modulos, paquetes, etc: https://golang.org/doc/code
