@@ -2,6 +2,7 @@ package tree
 
 import (
 	"math/rand"
+	"reflect"
 	"testing"
 	"time"
 )
@@ -21,5 +22,21 @@ func TestCreateOneRandomChild(t *testing.T) {
 		t.Log("Node left is ", node.Left)
 	} else {
 		t.Log("Node right is ", node.Right)
+	}
+}
+
+func TestNewSequence(t *testing.T) {
+	expected := Sequence{2, 4, 6, 8, 10, 12, 14, 16, 18, 20}
+	if !reflect.DeepEqual(expected, NewSequence(2)) {
+		t.Fail()
+	}
+	//	fmt.Printf("%v\n", reflect.DeepEqual(expected, NewSequence(2)))
+}
+
+func TestExtractRandomValue(t *testing.T) {
+	seq := NewSequence(1)
+	for seq.Count() > 0 {
+		extracted := seq.ExtractRandomValue()
+		t.Log(extracted)
 	}
 }

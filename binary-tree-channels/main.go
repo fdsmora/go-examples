@@ -1,9 +1,11 @@
 package main
 
 import (
-	"tree/tree"
+	"binary-tree-channels/tree"
 )
 
 func main() {
-	t := tree.Tree{nil, 0, nil}
+	t := tree.New(1)
+
+	t.Print()
 }
