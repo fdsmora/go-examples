@@ -36,7 +36,7 @@ func TestNewSequence(t *testing.T) {
 func TestExtractRandomValue(t *testing.T) {
 	seq := NewSequence(1)
 	for seq.Count() > 0 {
-		extracted := seq.ExtractRandomValue()
+		extracted := ExtractRandomValue(&seq)
 		t.Log(extracted)
 	}
 }

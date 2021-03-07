@@ -44,7 +44,7 @@ func allocate(tree *Tree, seq Sequence) {
 	}
 
 	if tree.Value == 0 {
-		tree.Value = seq.ExtractRandomValue()
+		tree.Value = ExtractRandomValue(&seq)
 	}
 
 	if hasChild := tree.Left != nil || tree.Right != nil; !hasChild {
@@ -77,14 +77,14 @@ func CreateOneRandomChild(tree *Tree, r *rand.Rand) {
 	*child = &Tree{nil, 0, nil}
 }
 
-func (seq *Sequence) ExtractRandomValue() int {
+func ExtractRandomValue(seq *Sequence) int {
 	r := GetRandom()
 	slice := *seq
 	i := r.Intn(slice.Count())
 	var selected int
 	selected, slice[i] = slice[i], slice[slice.Count()-1]
 	slice = slice[:slice.Count()-1]
-	*seq = Sequence(slice)
+	*seq = slice
 	//	*seq = Sequence(slice[:slice.Count()-1])
 	return selected
 }
