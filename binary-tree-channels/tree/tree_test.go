@@ -27,7 +27,7 @@ func TestCreateOneRandomChild(t *testing.T) {
 
 func TestNewSequence(t *testing.T) {
 	expected := Sequence{2, 4, 6, 8, 10, 12, 14, 16, 18, 20}
-	if !reflect.DeepEqual(expected, NewSequence(2)) {
+	if !reflect.DeepEqual(expected, *NewSequence(2)) {
 		t.Fail()
 	}
 	//	fmt.Printf("%v\n", reflect.DeepEqual(expected, NewSequence(2)))
@@ -35,8 +35,8 @@ func TestNewSequence(t *testing.T) {
 
 func TestExtractRandomValue(t *testing.T) {
 	seq := NewSequence(1)
-	for seq.Count() > 0 {
-		extracted := ExtractRandomValue(&seq)
+	for len(*seq) > 0 {
+		extracted := ExtractRandomValue(seq)
 		t.Log(extracted)
 	}
 }
