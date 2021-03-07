@@ -14,44 +14,40 @@ type Tree struct {
 
 type Sequence []int
 
-func (seq Sequence) Count() int {
-	return len(seq)
-}
-
 func New(value int) *Tree {
 	seq := NewSequence(value)
 	root := &Tree{nil, 0, nil}
 
-	for seq.Count() > 0 {
+	for len(*seq) > 0 {
 		allocate(root, seq)
 	}
 	return root
 }
 
-func NewSequence(v int) Sequence {
+func NewSequence(v int) *Sequence {
 	count := 10
 	values := make(Sequence, count)
 	for i := 0; len(values) > i; i++ {
 		values[i] = (i + 1) * v
 	}
 
-	return values
+	return &values
 }
 
-func allocate(tree *Tree, seq Sequence) {
-	if tree == nil || seq.Count() == 0 {
+func allocate(tree *Tree, seq *Sequence) {
+	if tree == nil || len(*seq) == 0 {
 		return
 	}
 
 	if tree.Value == 0 {
-		tree.Value = ExtractRandomValue(&seq)
+		tree.Value = ExtractRandomValue(seq)
 	}
 
 	if hasChild := tree.Left != nil || tree.Right != nil; !hasChild {
 		var r *rand.Rand
 		r = GetRandom()
 
-		numberOfChildren := r.Intn(3)
+		numberOfChildren := Min(r.Intn(3), len(*seq))
 		switch numberOfChildren {
 		case 1:
 			CreateOneRandomChild(tree, r)
@@ -80,10 +76,10 @@ func CreateOneRandomChild(tree *Tree, r *rand.Rand) {
 func ExtractRandomValue(seq *Sequence) int {
 	r := GetRandom()
 	slice := *seq
-	i := r.Intn(slice.Count())
+	i := r.Intn(len(slice))
 	var selected int
-	selected, slice[i] = slice[i], slice[slice.Count()-1]
-	slice = slice[:slice.Count()-1]
+	selected, slice[i] = slice[i], slice[len(slice)-1]
+	slice = slice[:len(slice)-1]
 	*seq = slice
 	//	*seq = Sequence(slice[:slice.Count()-1])
 	return selected
@@ -100,4 +96,11 @@ func PrintInOrder(t *Tree) {
 	PrintInOrder(t.Left)
 	fmt.Printf("%d ", t.Value)
 	PrintInOrder(t.Right)
+}
+
+func Min(x, y int) int {
+	if x < y {
+		return x
+	}
+	return y
 }
