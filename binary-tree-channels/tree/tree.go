@@ -1,7 +1,6 @@
 package tree
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 )
@@ -85,17 +84,19 @@ func ExtractRandomValue(seq *Sequence) int {
 	return selected
 }
 
-func (t *Tree) Print() {
-	PrintInOrder(t)
+func (t *Tree) Walk(c chan int) {
+	PrintInOrder(t, c)
+	close(c)
 }
 
-func PrintInOrder(t *Tree) {
+func PrintInOrder(t *Tree, c chan int) {
 	if t == nil {
 		return
 	}
-	PrintInOrder(t.Left)
-	fmt.Printf("%d ", t.Value)
-	PrintInOrder(t.Right)
+	PrintInOrder(t.Left, c)
+	c <- t.Value
+	//	fmt.Printf("%d ", t.Value)
+	PrintInOrder(t.Right, c)
 }
 
 func Min(x, y int) int {
