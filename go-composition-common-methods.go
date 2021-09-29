@@ -23,7 +23,7 @@ func (p *Player) Greetings() string {
 	return fmt.Sprintf("Player: Hi %s from %s",
 		p.Name, p.Location)}
 
-// It's better to compose structs through pointers. 
+// It's better to compose structs through pointers
 type Player struct {
 	*User
 	GameId int
