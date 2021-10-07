@@ -40,3 +40,48 @@ func MiFuncion()string {
     return res
 }
 
+/* Another equivalent approach without `once` */
+
+/*
+func TestMiFuncion(t *testing.T) {
+	fmt.Println("Hello, playground")
+
+	//for i := 0; i < 5; i++ {
+	//	fmt.Println(MiFuncion())
+	//}
+
+	for v := range MiFuncion() {
+		fmt.Printf("valor sacado: %v\n", v)
+	}
+
+}
+
+func MiFuncion() chan string {
+
+	var c chan string
+	var data []string = []string{"shura", "ikki", "shiryu", "seiya", "shun", "aldebaran", "nachi"}
+	//	once.Do(func() {
+	//		fmt.Println("once")
+	c = make(chan string)
+	go func() {
+		fmt.Printf("go rutine, data: %v, chan: %v\n", data, c)
+		for _, item := range data {
+			fmt.Printf("inner loop %s\n", item)
+			//time.Sleep(10 * time.Second)
+			c <- item
+		}
+		close(c)
+		// 			for {
+		//	time.Sleep(3 * time.Second)
+//			fmt.Println("goroutine inside once alive...")
+	//	} 
+
+	}()
+	//	})
+	//time.Sleep(13 * time.Second)
+	//res := "hola" + strconv.Itoa(num)
+	//res := <-c
+	//fmt.Println("fetched from channel: " + res)
+	return c
+}
+*/
