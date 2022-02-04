@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	_ "packages-learning/another"
+	"packages-learning/version"
+)
 
 /*
 	https://medium.com/rungo/everything-you-need-to-know-about-packages-in-go-b8bac62b74cc
@@ -27,4 +31,6 @@ var myVersion = fetchVersion()
 func main() {
 	fmt.Println("app/fetch-version.go ==> fetchVersion()")
 	fmt.Println("version ===> ", myVersion)
+	version.I += 1
+	fmt.Printf("entry.main() -> version.I = %d\n", version.I)
 }
