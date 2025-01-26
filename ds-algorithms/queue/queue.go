@@ -1,20 +1,27 @@
 package queue
 
-type Node struct {
-	Value int
+type Queue[T any] struct {
+	items []T
 }
 
-type Queue []*Node
-
-func (q *Queue) Dequeue() *Node {
-	if len(*q) == 0 {
-		return nil
+func (q *Queue[T]) Dequeue() T {
+	if len(q.items) == 0 {
+		var zero T
+		return zero
 	}
-	c := (*q)[0]
-	*q = (*q)[1:]
+	c := q.items[0]
+	q.items = q.items[1:]
 	return c
 }
 
-func (q *Queue) Enqueue(c *Node) {
-	*q = append(*q, c)
+func (q *Queue[T]) Enqueue(c T) {
+	q.items = append(q.items, c)
+}
+
+func NewQueue[T any]() *Queue[T] {
+	return &Queue[T]{}
+}
+
+func (q *Queue[T]) Len() int {
+	return len(q.items)
 }
