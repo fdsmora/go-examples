@@ -1,4 +1,4 @@
-package main
+package queue
 
 type Node struct {
 	Value int
