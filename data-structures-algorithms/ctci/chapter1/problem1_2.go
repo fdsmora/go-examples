@@ -1,4 +1,4 @@
-package ctci
+package chapter1
 
 import "sort"
 
@@ -41,7 +41,7 @@ func IsPermutation(a, b string) bool {
 	return true
 }
 
-// runtime O(nlogn), O(n) space 
+// runtime O(nlogn), O(n) space
 func IsPermutationONLogN(a, b string) bool {
 	if len(a) != len(b) {
 		return false
