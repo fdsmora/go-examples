@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// My solution
 func Compress(s string) string {
 	n := len(s)
 	if n <= 1 {
@@ -29,4 +30,37 @@ func Compress(s string) string {
 		return sb.String()
 	}
 	return s
+}
+
+// CTCI solution, better because it calculates the final length first
+func CompressBetter(s string) string {
+	finalLength := countCompression(s)
+	if finalLength > len(s) {
+		return s
+	}
+
+	var sb strings.Builder
+	sb.Grow(finalLength)
+	consecutiveCount := 0
+	for i := 0; i < len(s); i++ {
+		consecutiveCount++
+		if i+1 >= len(s) || s[i] != s[i+1] {
+			sb.WriteByte(s[i])
+			sb.WriteString(strconv.Itoa(consecutiveCount))
+			consecutiveCount = 0
+		}
+	}
+	return sb.String()
+}
+
+func countCompression(s string) int {
+	var compressLength, countConsecutive int
+	for i := 0; i < len(s); i++ {
+		countConsecutive++
+		if i+1 >= len(s) || s[i] != s[i+1] {
+			compressLength += 1 + len(strconv.Itoa(countConsecutive))
+			countConsecutive = 0
+		}
+	}
+	return compressLength
 }

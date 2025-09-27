@@ -18,7 +18,7 @@ func TestCompress(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		result := Compress(tt.input)
+		result := CompressBetter(tt.input)
 		if result != tt.expected {
 			t.Errorf("Compress(%q) = %q; want %q", tt.input, result, tt.expected)
 		}
