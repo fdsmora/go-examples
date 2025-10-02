@@ -37,6 +37,8 @@ func SetToZeros(matrix [][]int) {
 	}
 }
 
+// Limitation is that works only with m*n matrices where m and n <=32, so space is O(1).
+// If n and m are unbounded, the space complexity is O(m+n) space.
 func SetToZerosBitVector(mtx [][]int) {
 	m, n := len(mtx), len(mtx[0])
 
