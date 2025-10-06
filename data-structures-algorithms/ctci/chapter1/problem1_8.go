@@ -1,39 +1,52 @@
 package chapter1
 
-func SetToZeros(matrix [][]int) {
-	m := len(matrix)
-	n := len(matrix[0])
+func SetToZeros(mtx [][]int) {
+	m := len(mtx)
+	n := len(mtx[0])
 
-	var zeroFound bool
+	var rowHasZeros, colHasZeros bool
 
-	for r := 0; r < m; r++ {
-		for c := 0; c < n; c++ {
-			if matrix[r][c] == 0 {
-				zeroFound = true
-				matrix[0][c] = -1
-				matrix[r][0] = -1
+	for c := 0; c < n && !rowHasZeros; c++ {
+		if mtx[0][c] == 0 {
+			rowHasZeros = true
+		}
+	}
+	for r := 0; r < m && !colHasZeros; r++ {
+		if mtx[r][0] == 0 {
+			colHasZeros = true
+		}
+	}
+
+	for r := 1; r < m; r++ {
+		for c := 1; c < n; c++ {
+			if mtx[r][c] == 0 {
+				mtx[0][c] = 0
+				mtx[r][0] = 0
 			}
 		}
 	}
-	if !zeroFound {
-		return
-	}
-	for r := 0; r < m; r++ {
-		if matrix[r][0] == -1 {
-			for c := 0; c < n; c++ {
-				if r == 0 && matrix[r][c] == -1 {
-					continue
-				}
-				matrix[r][c] = 0
+
+	for r := 1; r < m; r++ {
+		if mtx[r][0] == 0 {
+			// nullify row
+			for c := 1; c < n; c++ {
+				mtx[r][c] = 0
 			}
 		}
 	}
-	for c := 0; c < n; c++ {
-		if matrix[0][c] == -1 {
-			for r := 0; r < m; r++ {
-				matrix[r][c] = 0
+	for c := 1; c < n; c++ {
+		if mtx[0][c] == 0 {
+			// nullify column
+			for r := 1; r < m; r++ {
+				mtx[r][c] = 0
 			}
 		}
+	}
+	if rowHasZeros {
+		nullifyRow(mtx, 0)
+	}
+	if colHasZeros {
+		nullifyColumn(mtx, 0)
 	}
 }
 
@@ -70,7 +83,7 @@ func nullifyColumn(mtx [][]int, col int) {
 }
 
 func nullifyRow(mtx [][]int, row int) {
-	for c := 0; c < len(mtx); c++ {
+	for c := 0; c < len(mtx[0]); c++ {
 		mtx[row][c] = 0
 	}
 }
