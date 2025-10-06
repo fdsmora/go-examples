@@ -6,14 +6,16 @@ func SetToZeros(mtx [][]int) {
 
 	var rowHasZeros, colHasZeros bool
 
-	for c := 0; c < n && !rowHasZeros; c++ {
+	for c := 0; c < n; c++ {
 		if mtx[0][c] == 0 {
 			rowHasZeros = true
+			break
 		}
 	}
-	for r := 0; r < m && !colHasZeros; r++ {
+	for r := 0; r < m; r++ {
 		if mtx[r][0] == 0 {
 			colHasZeros = true
+			break
 		}
 	}
 
@@ -28,18 +30,12 @@ func SetToZeros(mtx [][]int) {
 
 	for r := 1; r < m; r++ {
 		if mtx[r][0] == 0 {
-			// nullify row
-			for c := 1; c < n; c++ {
-				mtx[r][c] = 0
-			}
+			nullifyRow(mtx, r)
 		}
 	}
 	for c := 1; c < n; c++ {
 		if mtx[0][c] == 0 {
-			// nullify column
-			for r := 1; r < m; r++ {
-				mtx[r][c] = 0
-			}
+			nullifyColumn(mtx, c)
 		}
 	}
 	if rowHasZeros {
