@@ -1,6 +1,9 @@
 package slidingwindow
 
 // leetcode problem 904
+// runtime O(2n) -> O(n), as e visits n fruits, and in the worst case, s goes back from e-1 to 1,
+// so when e = n-1, s visits almost all n elements backwards, adding another n so O(n + n)
+// space is O(1) as the basket only holds 2 items at most
 func totalFruit(fruits []int) int {
 	const basketSize = 2
 	if len(fruits) <= basketSize {
