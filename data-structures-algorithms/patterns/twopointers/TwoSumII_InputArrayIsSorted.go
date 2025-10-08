@@ -19,3 +19,21 @@ func TwoSum(numbers []int, target int) []int {
 	}
 	return []int{front + 1, back + 1}
 }
+
+func TwoSumSimpler(numbers []int, target int) []int {
+	front, back := 0, len(numbers)-1
+
+	for front < back {
+		sum := numbers[front] + numbers[back]
+
+		if sum == target {
+			break
+		}
+		if sum > target {
+			back--
+		} else {
+			front++
+		}
+	}
+	return []int{front + 1, back + 1}
+}
