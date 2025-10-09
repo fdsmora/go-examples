@@ -32,3 +32,23 @@ func LengthOfLongestSubstring(str string) int {
 
 	return int(math.Max(float64(max), float64(e-s+1)))
 }
+
+func LengthOfLongestSubstringSimpler(str string) int {
+	var start, longest int = 0, 0
+	charMap := make(map[byte]bool)
+
+	for end := range str {
+		char := str[end]
+		if !charMap[char] {
+			charMap[char] = true
+			longest = int(math.Max(float64(longest), float64(end-start+1)))
+		} else {
+			for charMap[char] {
+				charMap[str[start]] = false
+				start++
+			}
+			charMap[char] = true
+		}
+	}
+	return longest
+}
