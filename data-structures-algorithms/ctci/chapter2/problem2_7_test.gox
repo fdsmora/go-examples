@@ -1,0 +1,80 @@
+package chapter2
+
+import (
+	"reflect"
+	"testing"
+)
+
+func buildList(vals []int) *Node {
+	if len(vals) == 0 {
+		return nil
+	}
+	head := &Node{Value: vals[0]}
+	curr := head
+	for _, v := range vals[1:] {
+		curr.Next = &Node{Value: v}
+		curr = curr.Next
+	}
+	return head
+}
+
+func TestGetIntersectionOfLinkedLists(t *testing.T) {
+	// Helper to create two lists with intersection
+	makeIntersecting := func(aVals, bVals, sharedVals []int) (*Node, *Node, *Node) {
+		shared := buildList(sharedVals)
+		A := buildList(aVals)
+		B := buildList(bVals)
+		if A != nil {
+			curr := A
+			for curr.Next != nil {
+				curr = curr.Next
+			}
+			curr.Next = shared
+		} else {
+			A = shared
+		}
+		if B != nil {
+			curr := B
+			for curr.Next != nil {
+				curr = curr.Next
+			}
+			curr.Next = shared
+		} else {
+			B = shared
+		}
+		return A, B, shared
+	}
+
+	tests := []struct {
+		aVals, bVals, sharedVals []int
+		expect []int // intersection values
+	}{
+		{[]int{1,2,3}, []int{4,5}, []int{6,7,8}, []int{6,7,8}}, // intersection at 6
+		{[]int{1}, []int{2}, []int{3}, []int{3}},                // intersection at 3
+		{[]int{}, []int{}, []int{1,2}, []int{1,2}},              // both start at intersection
+		{[]int{1,2}, []int{3,4}, []int{}, []int{}},              // no intersection
+		{[]int{1,2,3}, []int{4,5,6}, []int{}, []int{}},          // no intersection
+	}
+
+	for _, tt := range tests {
+		A, B, shared := makeIntersecting(tt.aVals, tt.bVals, tt.sharedVals)
+		result := getIntersectionOfLinkedLists(A, B)
+		if tt.expect == nil || len(tt.expect) == 0 {
+			if result != nil {
+				t.Errorf("Expected nil, got %v", result)
+			}
+		} else {
+			if result == nil {
+				t.Errorf("Expected intersection at %v, got nil", tt.expect)
+			} else {
+				got := []int{}
+				for curr := result; curr != nil; curr = curr.Next {
+					got = append(got, curr.Value)
+				}
+				if !reflect.DeepEqual(got, tt.expect) {
+					t.Errorf("Expected intersection values %v, got %v", tt.expect, got)
+				}
+			}
+		}
+	}
+}
