@@ -1,9 +1,13 @@
 package miscelaneous
 
+import (
+	"math"
+)
+
 // Leetcode 5.
 // O(n*k) where k is the length of the largest palindrome, but k is an upper bound.
 // Not linear but better than O(n^2)
-func longestPalindrome(s string) string {
+/* func longestPalindrome(s string) string {
 	n := len(s)
 	if n <= 1 {
 		return s
@@ -42,6 +46,34 @@ func longestPalindrome(s string) string {
 		}
 	}
 	return s[maxLeft : maxRight+1]
+} */
+
+func longestPalindrome(s string) string {
+	n := len(s)
+	if n < 2 {
+		return s
+	}
+
+	var maxLeft, maxRight int
+	for i := 0; i < n; i++ {
+		even := getPalindromeLength(s, i, i)
+		odd := getPalindromeLength(s, i, i+1)
+		maxLen := int(math.Max(float64(even), float64(odd)))
+
+		if maxLen > maxRight-maxLeft+1 {
+			maxLeft = i - (maxLen-1)/2
+			maxRight = i + maxLen/2
+		}
+	}
+	return s[maxLeft : maxRight+1]
+}
+
+func getPalindromeLength(s string, left, right int) int {
+	for left >= 0 && right < len(s) && s[left] == s[right] {
+		left--
+		right++
+	}
+	return right - left - 1
 }
 
 /*
