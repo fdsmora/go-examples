@@ -11,7 +11,7 @@ type QueueNode[T any] struct {
 	next  *QueueNode[T]
 }
 
-func (q *QueueLinkedList[T]) Pop() (T, error) {
+func (q *QueueLinkedList[T]) Dequeue() (T, error) {
 	if q.head == nil {
 		var zero T
 		return zero, errors.New("empty list")
@@ -24,7 +24,7 @@ func (q *QueueLinkedList[T]) Pop() (T, error) {
 	return value, nil
 }
 
-func (q *QueueLinkedList[T]) Put(value T) {
+func (q *QueueLinkedList[T]) Enqueue(value T) {
 	newNode := &QueueNode[T]{value, nil}
 	if q.head == nil {
 		q.head = newNode

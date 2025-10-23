@@ -19,7 +19,7 @@ func (s *Stack[T]) Pop() (T, bool) {
 	}
 	idx := len(*s) - 1
 	val := (*s)[idx]
-	*s = (*s)[:idx]
+	*s = (*s)[:idx] // O(1) amortized
 	return val, true
 }
 
