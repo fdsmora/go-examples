@@ -13,5 +13,5 @@ func (q *Queue[T]) Dequeue() T {
 }
 
 func (q *Queue[T]) Enqueue(c T) {
-	*q = append(*q, c)
+	*q = append((*q), c)
 }
