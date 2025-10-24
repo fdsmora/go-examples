@@ -5,7 +5,7 @@ import "testing"
 func TestStackInts(t *testing.T) {
 	var s Stack[int]
 	if len(s) != 0 {
-		t.Fatalf("expected empty stack, got len %d", s.Len())
+		t.Fatalf("expected empty stack, got len %d", s.Size())
 	}
 
 	// Peek on empty returns zero value
@@ -23,8 +23,8 @@ func TestStackInts(t *testing.T) {
 	s.Push(20)
 	s.Push(30)
 
-	if s.Len() != 3 {
-		t.Fatalf("after pushes len = %d; want 3", s.Len())
+	if s.Size() != 3 {
+		t.Fatalf("after pushes len = %d; want 3", s.Size())
 	}
 
 	if got := s.Peek(); got != 30 {
@@ -53,8 +53,8 @@ func TestStackStrings(t *testing.T) {
 		s.Push(v)
 	}
 
-	if s.Len() != len(vals) {
-		t.Fatalf("len = %d; want %d", s.Len(), len(vals))
+	if s.Size() != len(vals) {
+		t.Fatalf("len = %d; want %d", s.Size(), len(vals))
 	}
 
 	// check LIFO

@@ -28,6 +28,10 @@ func (s *Stack[T]) Push(val T) {
 	*s = append(*s, val)
 }
 
-func (s *Stack[T]) Len() int {
+func (s *Stack[T]) Size() int {
 	return len(*s)
+}
+
+func (s *Stack[T]) IsEmpty() bool {
+	return len(*s) == 0
 }
