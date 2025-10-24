@@ -1,6 +1,6 @@
 package chapter3
 
-// CTCI problem 1.3
+// CTCI problem 3.1
 type ThreeStacks struct {
 	totalStacks               int
 	tops, limits, lowerLimits [3]int
