@@ -33,6 +33,24 @@ func LengthOfLongestSubstring(str string) int {
 	return int(math.Max(float64(max), float64(e-s+1)))
 }
 
+// O(n) runtime, O(m) space, where m is number of unique chars
+func LengthOfLongestSubstringEvenSimpler(s string) int {
+	var maxLen, currLen, front, back int
+	chars := map[byte]int{}
+
+	for front = 0; front < len(s); front++ {
+		if idx, ok := chars[s[front]]; ok {
+			back = max(back, idx+1)
+		}
+		chars[s[front]] = front
+		currLen = front - back + 1
+		if currLen > maxLen {
+			maxLen = currLen
+		}
+	}
+	return maxLen
+}
+
 func LengthOfLongestSubstringSimpler(str string) int {
 	var start, longest int = 0, 0
 	charMap := make(map[byte]bool)
