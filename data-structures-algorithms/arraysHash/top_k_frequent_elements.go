@@ -1,7 +1,5 @@
 package arrayshash
 
-//import "sort"
-
 // LC 347
 // O(n) runtime, O(n) space, using frequency buckets
 func topKFrequent(nums []int, k int) []int {
@@ -18,14 +16,10 @@ func topKFrequent(nums []int, k int) []int {
 
 	res := []int{}
 	for i := len(buckets) - 1; i > 0; i-- {
-		if len(buckets[i]) > 0 {
-			for _, v := range buckets[i] {
-				if k > 0 {
-					res = append(res, v)
-					k--
-				} else {
-					return res
-				}
+		for _, v := range buckets[i] {
+			res = append(res, v)
+			if len(res) == k {
+				return res
 			}
 		}
 	}
@@ -39,9 +33,9 @@ func topKFrequent(nums []int, k int) []int {
 	for _, v := range nums {
 		count[v]++
 	}
-	ordered := [][]int{}
-	for k, v := range count {
-		ordered = append(ordered, []int{k, v})
+	ordered := [][2]int{}
+	for num, count := range count {
+		ordered = append(ordered, [2]int{num, count})
 	}
 	sort.Slice(ordered, func(i, j int) bool {
 		return ordered[i][1] > ordered[j][1]
@@ -51,5 +45,4 @@ func topKFrequent(nums []int, k int) []int {
 		res = append(res, v[0])
 	}
 	return res
-}
-*/
+}*/
