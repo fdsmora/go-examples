@@ -1,4 +1,4 @@
-package miscelaneous
+package twopointers
 
 import (
 	"reflect"
