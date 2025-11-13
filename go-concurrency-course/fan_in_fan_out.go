@@ -1,5 +1,3 @@
-package goconcurrencycourse
-
 package main
 
 import (
