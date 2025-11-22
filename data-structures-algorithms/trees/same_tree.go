@@ -1,7 +1,6 @@
 package trees
 
 import (
-	"fmt"
 	"math"
 )
 
@@ -50,7 +49,6 @@ func isSameTree(p, q *TreeNode) bool {
 			case vQ := <-chQ:
 				lQ = append(lQ, vQ)
 			case dP = <-doneP:
-				continue
 			case dQ = <-doneQ:
 				continue
 			default:
@@ -67,8 +65,6 @@ func isSameTree(p, q *TreeNode) bool {
 	if len(lP) != len(lQ) {
 		return false
 	}
-	fmt.Printf("LP: %v\n", lP)
-	fmt.Printf("LQ: %v\n", lP)
 
 	for i, v := range lP {
 		if v != lQ[i] {
