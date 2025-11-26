@@ -1,4 +1,4 @@
-package main
+package goconcurrencycourse
 
 import "fmt"
 
