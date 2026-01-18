@@ -12,56 +12,96 @@ type element struct {
 }
 
 func longestCommonPrefix(strs []string) string {
-	n := len(strs)
+	if len(strs) == 0 {
+		return ""
+	}
+	if len(strs) == 1 {
+		return strs[0]
+	}
+
 	chChan := make(chan element)
-	//	abort := make(chan struct{})
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	wait := make(chan struct{})
-	defer close(wait)
+
+	// Buffered channel to prevent blocking when workers need to acknowledge
+	wait := make(chan struct{}, len(strs))
+
 	var wg sync.WaitGroup
 	for _, w := range strs {
 		wg.Add(1)
 		go worker(w, wait, ctx, cancel, chChan, &wg)
 	}
+
+	// Close channels when done to signal workers
+	go func() {
+		wg.Wait()
+		close(chChan)
+		close(wait)
+	}()
+
+	// Check each position in the first string
 	for i, ch := range strs[0] {
-		for range n {
+		// Send the character to all workers
+		for range len(strs) {
 			select {
 			case <-ctx.Done():
 				return strs[0][0:i]
-			default:
-				chChan <- element{ch, i}
+			case chChan <- element{ch, i}:
+				// Sent successfully
 			}
 		}
+
+		// Wait for all workers to acknowledge
 		for range len(strs) {
 			select {
 			case <-ctx.Done():
 				return strs[0][0:i]
 			case <-wait:
-				continue
+				// Worker acknowledged
 			}
 		}
-		fmt.Println("-----------------------")
+		fmt.Printf("Position %d ('%c'): All workers matched\n", i, ch)
 	}
-	wg.Wait()
-	fmt.Println("All workers completed successfully")
-	return ""
+
+	// All characters matched - return the entire first string
+	return strs[0]
 }
 
 func worker(word string, wait chan<- struct{}, ctx context.Context, cancel context.CancelFunc, chChan <-chan element, wg *sync.WaitGroup) {
 	defer wg.Done()
-	var elem element
+
 	for i, c := range word {
 		select {
-		case elem = <-chChan:
+		case elem, ok := <-chChan:
+			if !ok {
+				// Channel closed - we're done
+				return
+			}
+
+			// Check if character matches
 			if i != elem.i || c != elem.ch {
+				fmt.Printf("Worker '%s': Mismatch at position %d (expected '%c', got '%c')\n",
+					word, i, c, elem.ch)
 				cancel()
 				return
 			}
+
+			fmt.Printf("Worker '%s': Match at position %d ('%c')\n", word, i, elem.ch)
+
+			// Acknowledge match - use select to avoid blocking if context is cancelled
+			select {
+			case wait <- struct{}{}:
+				// Acknowledged successfully
+			case <-ctx.Done():
+				return
+			}
+
 		case <-ctx.Done():
 			return
 		}
-		fmt.Printf("Goroutine '%s' got: '%s'\n", word, string(elem.ch))
-		wait <- struct{}{}
 	}
+
+	// This word is shorter - cancel since we can't match further
+	fmt.Printf("Worker '%s': Reached end (length %d)\n", word, len(word))
+	cancel()
 }
