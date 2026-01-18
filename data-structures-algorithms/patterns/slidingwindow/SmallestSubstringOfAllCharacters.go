@@ -3,27 +3,27 @@ package slidingwindow
 import "math"
 
 func SmallestSubstringAllChars(chars []string, str string) string {
-	mapCh := make(map[string]struct{})
+	validChars := [256]bool{}
 	for _, c := range chars {
-		mapCh[c] = struct{}{}
+		if len(c) > 0 {
+			validChars[c[0]] = true
+		}
 	}
 	var s, e int
 	minLen := math.MaxInt
 	var minS, minE int
-	for e < len(str) {
-		if _, ok := mapCh[string(str[e])]; !ok {
-			cLen := e - s
-			if cLen > 0 && cLen < minLen {
-				minLen = cLen
+	for ; e < len(str); e++ {
+		if !validChars[str[e]] {
+			if currLen := e - s; currLen > 0 && currLen < minLen {
+				minLen = currLen
 				minS, minE = s, e
 			}
 			s = e + 1
 		}
-		e++
 	}
-	cLen := e - s
-	if cLen > 0 && cLen < minLen {
-		minLen = cLen
+
+	if currLen := e - s; currLen > 0 && currLen < minLen {
+		minLen = currLen
 		minS, minE = s, e
 	}
 	return str[minS:minE]
