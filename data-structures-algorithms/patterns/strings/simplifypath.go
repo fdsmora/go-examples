@@ -82,6 +82,29 @@ func handleLastDir(dotCount *int, stack *Stack[string], sb *strings.Builder) {
 	*dotCount = 0
 }
 
+// Super simple solution
+/*
+func simplifyPath(path string) string {
+	stack := []string{}
+	paths := strings.Split(path, "/")
+
+	for _, p := range paths {
+		if p == "." || p == "" {
+			continue
+		}
+		if p == ".." {
+			if len(stack) > 0 {
+				stack = stack[:len(stack)-1]
+				continue
+			}
+		} else {
+			stack = append(stack, p)
+		}
+	}
+	return "/" + strings.Join(stack, "/")
+}
+*/
+
 /*
 
 /home/..
