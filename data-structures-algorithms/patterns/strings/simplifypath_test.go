@@ -311,7 +311,7 @@ func TestSimplifyPath(t *testing.T) {
 		{
 			name: "mixed everything",
 			path: "/a//b/./c/../d/../../e/f/..",
-			want: "/e",
+			want: "/a/e", // Corrected: was "/e", should be "/a/e"
 		},
 	}
 
