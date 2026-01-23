@@ -1,5 +1,11 @@
 package linkedlist
 
+import (
+	"fmt"
+	"strconv"
+	"strings"
+)
+
 // LeetCode problem 146. LRU Cache
 // https://leetcode.com/problems/lru-cache/
 // Medium
@@ -41,76 +47,86 @@ func NewLRUCache(capacity int) LRUCache {
 func (this *LRUCache) Get(key int) int {
 	if entry, exists := this.cache[key]; exists {
 		node := entry.node
-		if node == this.usageList.head {
-			return entry.value
+		if node != this.usageList.head {
+			// promote the most recently used key's node to head
+			this.promoteMostRecentlyUsedNodeToHead(node)
 		}
+		fmt.Printf("GET(%d), Return:%d, Cache:%#v\n", key, entry.value, printCache(this.cache))
 
-		// promote the most recently used key's node to head
-		this.promoteMostRecentlyUsedNodeToHead(node)
 		return entry.value
 	}
+	fmt.Printf("GET(%d), Return:%d, Cache:%#v\n", key, -1, printCache(this.cache))
 	return -1
 }
 
+func (this *LRUCache) Put(key int, value int) {
+	var entry *Entry
+	var exists bool
+	var node *Node
+	if entry, exists = this.cache[key]; exists {
+		node = entry.node
+	} else {
+		this.usageList.size++
+		if this.usageList.size > this.usageList.cap {
+			this.ejectLeastUsedEntry()
+		}
+		node = &Node{key: key}
+	}
+
+	if node != this.usageList.head {
+		this.promoteMostRecentlyUsedNodeToHead(node)
+	}
+	this.cache[key] = &Entry{value, node}
+	fmt.Printf("PUT(%d,%d),Cache:%#v\n", key, value, printCache(this.cache))
+}
+
+func printCache(cache map[int]*Entry) string {
+	var sb strings.Builder
+	for k, v := range cache {
+		sb.WriteString(strconv.Itoa(k) + "," + strconv.Itoa(v.value))
+	}
+	return "{" + sb.String() + "}"
+}
+
 func (this *LRUCache) promoteMostRecentlyUsedNodeToHead(node *Node) {
+	// if prev exists, connect prev with next
 	if node.prev != nil {
 		node.prev.next = node.next
 	}
+	// 	if next exists, connect next with previous
 	if node.next != nil {
 		node.next.prev = node.prev
 	}
+	// if node is the tail, new tail is tail.prev
 	if this.usageList.tail == node {
 		this.usageList.tail = this.usageList.tail.prev
 	}
+	// put node at head
 	node.next = this.usageList.head
 	if this.usageList.head != nil {
 		this.usageList.head.prev = node
 	}
 	node.prev = nil
 	this.usageList.head = node
-}
-
-func (this *LRUCache) Put(key int, value int) {
-	if entry, exists := this.cache[key]; exists {
-		entry.value = value
-		return
+	// if there's no next, it means the node is the tail
+	if node.next == nil {
+		this.usageList.tail = node
 	}
-
-	this.usageList.size++
-	if this.usageList.size > this.usageList.cap {
-		this.ejectLeastUsedEntry()
-	}
-
-	newNode := &Node{key: key}
-	this.promoteMostRecentlyUsedNodeToHead(newNode)
-	//newNode := this.updateHead(key, value)
-	this.cache[key] = &Entry{value, newNode}
-
-}
-
-func (this *LRUCache) updateHead(key int, value int) *Node {
-	newNode := &Node{key: key, prev: nil, next: nil}
-	newNode.prev = nil
-	newNode.next = this.usageList.head
-	if this.usageList.head != nil {
-		this.usageList.head.prev = newNode
-	}
-	this.usageList.head = newNode
-	if this.usageList.tail == nil {
-		this.usageList.tail = this.usageList.head
-	}
-	return newNode
 }
 
 func (this *LRUCache) ejectLeastUsedEntry() {
 	luKey := this.usageList.tail.key
 	toEject := this.usageList.tail
+	// The new tail is the previous of the one to eject
 	this.usageList.tail = toEject.prev
 	if this.usageList.tail != nil {
 		this.usageList.tail.next = nil
 	}
 	toEject.prev = nil
 	this.usageList.size--
+	if this.usageList.size == 0 {
+		this.usageList.head = nil
+	}
 	delete(this.cache, luKey)
 }
 
