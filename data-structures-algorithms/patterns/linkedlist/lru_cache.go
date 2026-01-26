@@ -9,6 +9,8 @@ import (
 // LeetCode problem 146. LRU Cache
 // https://leetcode.com/problems/lru-cache/
 // Medium
+
+// Using double linked list (not circular) and hash map
 type (
 	LRUCache struct {
 		cache     map[int]*Entry
@@ -66,10 +68,10 @@ func (this *LRUCache) Put(key int, value int) {
 	if entry, exists = this.cache[key]; exists {
 		node = entry.node
 	} else {
-		this.usageList.size++
-		if this.usageList.size > this.usageList.cap {
+		if this.usageList.size+1 > this.usageList.cap {
 			this.ejectLeastUsedEntry()
 		}
+		this.usageList.size++
 		node = &Node{key: key}
 	}
 
@@ -109,25 +111,39 @@ func (this *LRUCache) promoteMostRecentlyUsedNodeToHead(node *Node) {
 	node.prev = nil
 	this.usageList.head = node
 	// if there's no next, it means the node is the tail
-	if node.next == nil {
-		this.usageList.tail = node
+	if this.usageList.head.next == nil {
+		this.usageList.tail = this.usageList.head
 	}
 }
 
 func (this *LRUCache) ejectLeastUsedEntry() {
-	luKey := this.usageList.tail.key
-	toEject := this.usageList.tail
-	// The new tail is the previous of the one to eject
-	this.usageList.tail = toEject.prev
-	if this.usageList.tail != nil {
-		this.usageList.tail.next = nil
-	}
-	toEject.prev = nil
+	delete(this.cache, this.usageList.tail.key)
 	this.usageList.size--
-	if this.usageList.size == 0 {
+	if this.usageList.size <= 0 {
 		this.usageList.head = nil
+		this.usageList.tail = nil
+	} else {
+		this.usageList.tail.prev.next = nil
+		this.usageList.tail = this.usageList.tail.prev
 	}
-	delete(this.cache, luKey)
+	/*
+		luKey := this.usageList.tail.key
+		   toEject := this.usageList.tail
+		   // The new tail is the previous of the one to eject
+		   this.usageList.tail = toEject.prev
+
+		   	if this.usageList.tail != nil {
+		   		this.usageList.tail.next = nil
+		   	}
+
+		   toEject.prev = nil
+
+		   	if this.usageList.size <= 0 {
+		   		this.usageList.head = nil
+		   	}
+
+		   delete(this.cache, luKey)
+	*/
 }
 
 /**
